@@ -1,7 +1,40 @@
 import "./register.scss";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 const Register = () => {
+  const [inputs, setInputs] = useState({
+    username: "",
+    email: "",
+    password: "",
+    name: "",
+  });
+
+  const [err, setErr] = useState("");
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:5000/api/auth/register", inputs);
+    } catch (err) {
+      if (err.response.data ==="username already exist!"){
+        setErr(err.response.data)
+      }else {
+        setErr("registeration was error")
+      }
+      // setErr(err.response.data);
+      // console.log(err)
+    }
+  };
+
+  // console.log(inputs);
+  // console.log(err);
+
   return (
     <div className="register">
       <div className="card">
@@ -21,11 +54,34 @@ const Register = () => {
         <div className="right">
           <h1>Register</h1>
           <form>
-            <input type="email" placeholder="Email.." />
-            <input type="text" placeholder="Username.." />
-            <input type="password" placeholder="Password.." />
-            <input type="text" placeholder="Name.." />
-            <button>Register</button>
+            <input
+              type="text"
+              placeholder="Username.."
+              name="username"
+              onChange={handleChange}
+            />
+            <input
+              type="email"
+              placeholder="Email.."
+              name="email"
+              onChange={handleChange}
+            />
+            <input
+              type="password"
+              placeholder="Password.."
+              name="password"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              placeholder="Name.."
+              name="name"
+              onChange={handleChange}
+            />
+
+            {err && err}
+            {/* {err?.length && <p>{err}</p>} */}
+            <button onClick={handleClick}>Register</button>
           </form>
         </div>
       </div>

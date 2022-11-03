@@ -13,10 +13,8 @@ import { DarkModeContext } from "../../context/darkMode";
 import { AuthContext } from "../../context/authContext";
 
 const Navbar = () => {
-
-  const {toggle,darkMode} = useContext(DarkModeContext);
-  const {currentUser} = useContext(AuthContext);
-
+  const { toggle, darkMode } = useContext(DarkModeContext);
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <div className="navbar">
@@ -24,21 +22,33 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>RiLLSocial</span>
         </Link>
-          <HomeOutlinedIcon />
-          {darkMode ? <WbSunnyOutlinedIcon onClick={toggle} /> : <DarkModeOutlinedIcon  onClick={toggle}/>}
-          <GridViewOutlinedIcon />
-          <div className="search">
-            <SearchOutlinedIcon />
-            <input type="text" placeholder="Search.." />
-          </div>
+        <HomeOutlinedIcon />
+        {darkMode ? (
+          <WbSunnyOutlinedIcon onClick={toggle} />
+        ) : (
+          <DarkModeOutlinedIcon onClick={toggle} />
+        )}
+        <GridViewOutlinedIcon />
+        <div className="search">
+          <SearchOutlinedIcon />
+          <input type="text" placeholder="Search.." />
+        </div>
       </div>
       <div className="right">
         <PersonOutlineOutlinedIcon />
         <EmailOutlinedIcon />
         <NotificationsNoneOutlinedIcon />
         <div className="user">
-            <img src={currentUser.profile} alt={currentUser.name} />
+          <img
+            src={"/upload/" + currentUser.profilePic}
+            alt={currentUser.name}
+          />
+          <Link
+            to={`/profile/${currentUser.id}`}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
             <span>{currentUser.name}</span>
+          </Link>
         </div>
       </div>
     </div>

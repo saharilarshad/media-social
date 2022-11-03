@@ -15,14 +15,34 @@ import Profile from "./pages/profile/Profile";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkMode";
 import { AuthContext } from "./context/authContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
   // const currentUser = true;
 
-  const {darkMode} = useContext(DarkModeContext);
-  const {currentUser} = useContext(AuthContext);
+  const { darkMode } = useContext(DarkModeContext);
+  const { currentUser } = useContext(AuthContext);
 
   // console.log(darkMode);
+
+  const queryClient = new QueryClient()
+
+  const Layout = () => {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className={`theme-${darkMode ? "dark" : "light"}`}>
+          <Navbar />
+          <div style={{ display: "flex" }}>
+            <LeftBar />
+            <div style={{ flex: 6 }}>
+              <Outlet />
+            </div>
+            <RightBar />
+          </div>
+        </div>
+      </QueryClientProvider>
+    );
+  };
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {
@@ -30,20 +50,6 @@ function App() {
     }
 
     return children;
-  };
-  const Layout = () => {
-    return (
-      <div className={`theme-${darkMode ? "dark" : "light"}`}>
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <div style={{ flex: 6 }}>
-            <Outlet />
-          </div>
-          <RightBar />
-        </div>
-      </div>
-    );
   };
 
   const router = createBrowserRouter([
